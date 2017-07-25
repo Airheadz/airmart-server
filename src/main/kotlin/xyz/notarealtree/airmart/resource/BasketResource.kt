@@ -1,6 +1,7 @@
 package xyz.notarealtree.airmart.resource
 
 import com.google.common.base.Preconditions
+import com.google.common.hash.Hashing
 import org.slf4j.LoggerFactory
 import java.util.*
 import javax.ws.rs.*
@@ -30,10 +31,20 @@ class BasketResource {
     }
 
     @POST
-    @Path("/add/{basketId}")
-    fun addToBasket(@QueryParam("basketId") basketId: String, items: List<Pair<String, Int>>) {
+    @Path("/{basketId}/add")
+    fun addToBasket(@PathParam("basketId") basketId: String, items: Map<String, Int>) {
         Preconditions.checkArgument(baskets.containsKey(basketId), "Specified basket $basketId does not exist.")
         baskets.computeIfPresent(basketId, { _, basket -> basket.addItems(items)})
+    }
+
+    @POST
+    @Path("/{basketId}/checkout")
+    fun checkout(@PathParam("basketId") basketId: String) : String {
+        Preconditions.checkArgument(baskets.containsKey(basketId), "Specified basket $basketId does not exist.")
+        val items = baskets[basketId].toString()
+        val orderId = Hashing.sha256().hashString(basketId, Charsets.UTF_8).toString()
+        // TODO Post to webhook?
+        return orderId
     }
 
 }
