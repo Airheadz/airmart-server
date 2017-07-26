@@ -12,8 +12,8 @@ class AirMart: Application<AirMartConfiguration>() {
         }
     }
 
-    override fun run(configuration: AirMartConfiguration?, environment: Environment?) {
-        val resource = BasketResource()
+    override fun run(configuration: AirMartConfiguration, environment: Environment?) {
+        val resource = BasketResource(configuration)
         environment?.jersey()?.register(resource)
     }
 
