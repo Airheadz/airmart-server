@@ -2,6 +2,7 @@ package xyz.notarealtree.airmart
 
 import io.dropwizard.Application
 import io.dropwizard.setup.Environment
+import xyz.notarealtree.airmart.resource.AppraisalResource
 import xyz.notarealtree.airmart.resource.BasketResource
 
 class AirMart: Application<AirMartConfiguration>() {
@@ -13,8 +14,8 @@ class AirMart: Application<AirMartConfiguration>() {
     }
 
     override fun run(configuration: AirMartConfiguration, environment: Environment?) {
-        val resource = BasketResource(configuration)
-        environment?.jersey()?.register(resource)
+        environment?.jersey()?.register(BasketResource(configuration))
+        environment?.jersey()?.register(AppraisalResource(configuration))
     }
 
 }
