@@ -19,6 +19,7 @@ class BasketResource(val config: AirMartConfiguration) {
 
     val log = LoggerFactory.getLogger("BasketResource")
     val baskets = hashMapOf<String, Basket>()
+    var appraiser = AppraisalResource(config)
 
     @GET
     @Path("/all")
@@ -66,11 +67,14 @@ class BasketResource(val config: AirMartConfiguration) {
     }
 
     private fun formatOrderText(customer: String, location: String, orderId: String, items: String): String {
+        val appraisal = appraiser.getAppraisal(items)
         return "An order has been placed!\n" +
                 "OrderId: $orderId\n" +
                 "Customer: $customer\n" +
                 "Location: $location\n" +
-                "Items: $items"
+                "Items: \n\n$items\n\n" +
+                "Total Volume: ${appraisal.totals.volume}m3\n" +
+                "Total Price: ${appraisal.totals.sell} ISK"
     }
 
 }
