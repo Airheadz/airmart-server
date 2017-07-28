@@ -59,7 +59,7 @@ class BasketResource(val config: AirMartConfiguration, val dbManager: DbManager,
         val orderId = Hashing.sha256().hashString(basketId, Charsets.UTF_8).toString()
 
         val orderText = formatOrderText(customer, location, orderId, items)
-
+        proxy.postMessageToDiscord(orderText)
 
         return Order(orderId)
     }
