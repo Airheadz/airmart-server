@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class BasketResource(val config: AirMartConfiguration, val dbManager: DbManager, val proxy: ApiProxy) {
-
     val log = LoggerFactory.getLogger("BasketResource")
     val baskets = hashMapOf<String, Basket>()
     var appraiser = AppraisalResource(config)
@@ -58,10 +57,14 @@ class BasketResource(val config: AirMartConfiguration, val dbManager: DbManager,
         val items = baskets[basketId].toString()
         val orderId = Hashing.sha256().hashString(basketId, Charsets.UTF_8).toString()
 
-        val orderText = formatOrderText(customer, location, orderId, items)
-        proxy.postMessageToDiscord(orderText)
+        val order = Order(orderId, customer, location, items)
 
-        return Order(orderId)
+        val orderText = formatOrderText(customer, location, orderId, items)
+
+        proxy.postMessageToDiscord(orderText)
+        dbManager.addOrder(order)
+
+        return order
     }
 
     private fun formatOrderText(customer: String, location: String, orderId: String, items: String): String {

@@ -6,6 +6,7 @@ import com.google.common.base.Preconditions
 import com.lambdaworks.redis.api.sync.RedisStringCommands
 import xyz.notarealtree.airmart.model.Order
 
+// TODO may be worth putting these in a set
 class DbManager(val connection: RedisStringCommands<String, String>) {
     val mapper = jacksonObjectMapper()
 
