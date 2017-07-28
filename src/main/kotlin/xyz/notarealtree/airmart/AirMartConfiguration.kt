@@ -9,4 +9,7 @@ class AirMartConfiguration : Configuration() {
 
     @JsonProperty("discordUserAgent")
     var discordUserAgent: String="Stranger"
+
+    @JsonProperty("redisClientUrl")
+    var redisClientUrl: String = "redis://localhost"
 }

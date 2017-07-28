@@ -1,13 +1,12 @@
 package xyz.notarealtree.airmart.resource
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.kittinunf.fuel.Fuel
 import com.google.common.base.Preconditions
-import com.google.common.collect.ImmutableMap
 import com.google.common.hash.Hashing
 import org.slf4j.LoggerFactory
 import xyz.notarealtree.airmart.AirMartConfiguration
+import xyz.notarealtree.airmart.model.BasketResponse
 import xyz.notarealtree.airmart.model.Order
+import xyz.notarealtree.airmart.service.DbManager
 import java.util.*
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -15,7 +14,7 @@ import javax.ws.rs.core.MediaType
 @Path("/basket")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-class BasketResource(val config: AirMartConfiguration) {
+class BasketResource(val config: AirMartConfiguration, val dbManager: DbManager) {
 
     val log = LoggerFactory.getLogger("BasketResource")
     val baskets = hashMapOf<String, Basket>()
@@ -43,6 +42,12 @@ class BasketResource(val config: AirMartConfiguration) {
         baskets.computeIfPresent(basketId, { _, basket -> basket.addItems(items)})
     }
 
+    @GET
+    @Path("/{basketId}")
+    fun getBasket(@PathParam("basketId") basketId: String) : BasketResponse {
+        return BasketResponse(1.0, 1.0, "1")
+    }
+
     @POST
     @Path("/{basketId}/checkout/customer/{customer}/location/{location}")
     fun checkout(@PathParam("basketId") basketId: String,
@@ -54,15 +59,6 @@ class BasketResource(val config: AirMartConfiguration) {
 
         val orderText = formatOrderText(customer, location, orderId, items)
 
-        var mapper = ObjectMapper()
-        val writeValueAsString = mapper.writeValueAsString(ImmutableMap.of("content", "```$orderText```"))
-
-        Fuel.post(config.discordWebhookUrl)
-                .header(Pair("Content-type", "application/json"))
-                .header(Pair("User-Agent", config.discordUserAgent))
-                .body(writeValueAsString)
-                .response()
-                // TODO Post to webhook?
         return Order(orderId)
     }
 
