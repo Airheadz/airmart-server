@@ -6,6 +6,7 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Environment
 import xyz.notarealtree.airmart.resource.AppraisalResource
 import xyz.notarealtree.airmart.resource.BasketResource
+import xyz.notarealtree.airmart.service.ApiProxy
 import xyz.notarealtree.airmart.service.DbManager
 
 class AirMart: Application<AirMartConfiguration>() {
@@ -18,7 +19,8 @@ class AirMart: Application<AirMartConfiguration>() {
 
     override fun run(configuration: AirMartConfiguration, environment: Environment?) {
         val dbManager = DbManager(redisClient(configuration))
-        environment?.jersey()?.register(BasketResource(configuration, dbManager))
+        val proxy = ApiProxy(configuration)
+        environment?.jersey()?.register(BasketResource(configuration, dbManager, proxy))
         environment?.jersey()?.register(AppraisalResource(configuration))
     }
 

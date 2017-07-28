@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import xyz.notarealtree.airmart.AirMartConfiguration
 import xyz.notarealtree.airmart.model.BasketResponse
 import xyz.notarealtree.airmart.model.Order
+import xyz.notarealtree.airmart.service.ApiProxy
 import xyz.notarealtree.airmart.service.DbManager
 import java.util.*
 import javax.ws.rs.*
@@ -14,7 +15,7 @@ import javax.ws.rs.core.MediaType
 @Path("/basket")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-class BasketResource(val config: AirMartConfiguration, val dbManager: DbManager) {
+class BasketResource(val config: AirMartConfiguration, val dbManager: DbManager, val proxy: ApiProxy) {
 
     val log = LoggerFactory.getLogger("BasketResource")
     val baskets = hashMapOf<String, Basket>()
@@ -58,6 +59,7 @@ class BasketResource(val config: AirMartConfiguration, val dbManager: DbManager)
         val orderId = Hashing.sha256().hashString(basketId, Charsets.UTF_8).toString()
 
         val orderText = formatOrderText(customer, location, orderId, items)
+
 
         return Order(orderId)
     }
