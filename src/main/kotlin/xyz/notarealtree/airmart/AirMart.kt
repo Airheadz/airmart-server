@@ -4,6 +4,7 @@ import com.lambdaworks.redis.RedisClient
 import com.lambdaworks.redis.api.sync.RedisStringCommands
 import io.dropwizard.Application
 import io.dropwizard.setup.Environment
+import xyz.notarealtree.airmart.checks.RedisHealthCheck
 import xyz.notarealtree.airmart.resource.AppraisalResource
 import xyz.notarealtree.airmart.resource.BasketResource
 import xyz.notarealtree.airmart.resource.CharacterResource
@@ -24,6 +25,7 @@ class AirMart: Application<AirMartConfiguration>() {
         environment?.jersey()?.register(BasketResource(configuration, dbManager, proxy))
         environment?.jersey()?.register(AppraisalResource(configuration))
         environment?.jersey()?.register(CharacterResource(configuration))
+        environment?.healthChecks()?.register("redis", RedisHealthCheck(redisClient(configuration)))
     }
 
     // TODO: check whether this has problems with concurrent calls
