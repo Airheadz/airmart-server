@@ -6,6 +6,7 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Environment
 import xyz.notarealtree.airmart.resource.AppraisalResource
 import xyz.notarealtree.airmart.resource.BasketResource
+import xyz.notarealtree.airmart.resource.CharacterResource
 import xyz.notarealtree.airmart.service.ApiProxy
 import xyz.notarealtree.airmart.service.DbManager
 
@@ -22,6 +23,7 @@ class AirMart: Application<AirMartConfiguration>() {
         val proxy = ApiProxy(configuration)
         environment?.jersey()?.register(BasketResource(configuration, dbManager, proxy))
         environment?.jersey()?.register(AppraisalResource(configuration))
+        environment?.jersey()?.register(CharacterResource(configuration))
     }
 
     // TODO: check whether this has problems with concurrent calls

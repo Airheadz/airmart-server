@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions
 import com.google.common.hash.Hashing
 import org.slf4j.LoggerFactory
 import xyz.notarealtree.airmart.AirMartConfiguration
+import xyz.notarealtree.airmart.model.Basket
 import xyz.notarealtree.airmart.model.BasketResponse
 import xyz.notarealtree.airmart.model.Order
 import xyz.notarealtree.airmart.service.ApiProxy

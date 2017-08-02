@@ -21,7 +21,7 @@ class AppraisalResource(val config: AirMartConfiguration) {
     @Path("/appraise")
     fun getAppraisal(items: String): EvePraisalResponse {
         val (_, response, _) = "http://evepraisal.com/appraisal"
-                .httpPost(ImmutableList.of(
+                .httpPost(listOf(
                         Pair("raw_textarea", items),
                         Pair("market", "jita"))).response()
         val header = response.httpResponseHeaders["X-Appraisal-Id"].toString()

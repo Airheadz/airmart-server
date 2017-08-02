@@ -2,6 +2,7 @@ package xyz.notarealtree.airmart
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.dropwizard.Configuration
+import xyz.notarealtree.airmart.model.SsoConfig
 
 class AirMartConfiguration : Configuration() {
     @JsonProperty("discordWebhookUrl")
@@ -12,4 +13,7 @@ class AirMartConfiguration : Configuration() {
 
     @JsonProperty("redisClientUrl")
     var redisClientUrl: String = "redis://localhost"
+
+    @JsonProperty("sso")
+    var ssoConfig: SsoConfig = SsoConfig()
 }

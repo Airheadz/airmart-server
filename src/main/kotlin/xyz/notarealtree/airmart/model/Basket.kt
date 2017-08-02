@@ -1,4 +1,4 @@
-package xyz.notarealtree.airmart.resource
+package xyz.notarealtree.airmart.model
 
 class Basket(val basketId: String) {
     val items = mutableMapOf<String, Int>()
