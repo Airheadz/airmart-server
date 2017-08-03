@@ -8,8 +8,10 @@ import xyz.notarealtree.airmart.checks.RedisHealthCheck
 import xyz.notarealtree.airmart.resource.AppraisalResource
 import xyz.notarealtree.airmart.resource.BasketResource
 import xyz.notarealtree.airmart.resource.CharacterResource
+import xyz.notarealtree.airmart.resource.FittingsResource
 import xyz.notarealtree.airmart.service.ApiProxy
 import xyz.notarealtree.airmart.service.DbManager
+import xyz.notarealtree.airmart.service.FittingManager
 
 class AirMart: Application<AirMartConfiguration>() {
     companion object {
@@ -22,9 +24,12 @@ class AirMart: Application<AirMartConfiguration>() {
     override fun run(configuration: AirMartConfiguration, environment: Environment?) {
         val dbManager = DbManager(redisClient(configuration))
         val proxy = ApiProxy(configuration)
+        val fittingsManager = FittingManager(configuration)
         environment?.jersey()?.register(BasketResource(configuration, dbManager, proxy))
         environment?.jersey()?.register(AppraisalResource(configuration))
         environment?.jersey()?.register(CharacterResource(configuration))
+        environment?.jersey()?.register(FittingsResource(fittingsManager))
+
         environment?.healthChecks()?.register("redis", RedisHealthCheck(redisClient(configuration)))
     }
 

@@ -16,4 +16,7 @@ class AirMartConfiguration : Configuration() {
 
     @JsonProperty("sso")
     var ssoConfig: SsoConfig = SsoConfig()
+
+    @JsonProperty("fittingsBasePath")
+    val fittingsBasePath: String = ""
 }
