@@ -1,8 +1,8 @@
 package xyz.notarealtree.airmart.model
 
-data class Doctrine(
+data class DoctrineConfig(
         val name: String,
         val type: String,
         val colourClass: String,
-        val fittings: List<Fitting>
+        val data: Map<String, Any>
 )

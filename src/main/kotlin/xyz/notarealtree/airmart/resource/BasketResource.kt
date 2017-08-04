@@ -38,7 +38,7 @@ class BasketResource(val config: AirMartConfiguration, val dbManager: DbManager,
 
     @POST
     @Path("/{basketId}/add")
-    fun addToBasket(@PathParam("basketId") basketId: String, items: Map<String, Int>) {
+    fun addToBasket(@PathParam("basketId") basketId: String, items: List<String>) {
         Preconditions.checkArgument(baskets.containsKey(basketId), "Specified basket $basketId does not exist.")
         baskets.computeIfPresent(basketId, { _, basket -> basket.addItems(items)})
     }
