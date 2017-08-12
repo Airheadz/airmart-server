@@ -61,8 +61,7 @@ class FittingManager(val configuration: AirMartConfiguration) {
         val lines = file.readLines()
         val type = lines[0]
         val items = mutableMapOf<String, Int>()
-        lines.subList(1, lines.size)
-                .filter({line -> line != ""})
+        lines.filter({line -> line != ""})
                 .forEach({line ->
                     run {
                         items.computeIfPresent(line, { _, v -> 1 + v })
