@@ -60,6 +60,7 @@ class CharacterResource(val configuration: AirMartConfiguration) {
                 .httpGet()
                 .header(Pair("Authorization", "Bearer ${tokenResponse.access_token}"))
                 .response()
+        println(characterResponse)
 
         val parsedResponse = jacksonObjectMapper().readValue<CharacterResponse>(String(characterResponse.data))
         val loginResponse = LoginResponse(parsedResponse.CharacterName, tokenResponse.access_token)
