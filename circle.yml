@@ -8,5 +8,6 @@ deployment:
     branch: master
     commands:
       - chmod +x scripts/deploy.sh
+      - chmod +x ./gradlew
       - ./gradlew shadowJar
       - ./scripts/deploy.sh
