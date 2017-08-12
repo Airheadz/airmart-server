@@ -1,3 +1,12 @@
+machine:
+  java:
+    version: oraclejdk8
+
+dependencies:
+  override:
+    - chmod +x gradlew
+    - ./gradlew dependencies
+
 test:
   override:
     - echo "test"
