@@ -2,9 +2,12 @@ package xyz.notarealtree.airmart.resource
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.google.common.base.Preconditions
 import xyz.notarealtree.airmart.AirMartConfiguration
+import xyz.notarealtree.airmart.model.CharacterResponse
+import xyz.notarealtree.airmart.model.LoginResponse
 import xyz.notarealtree.airmart.model.TokenResponse
 import java.net.URI
 import java.net.URLEncoder
@@ -37,7 +40,7 @@ class CharacterResource(val configuration: AirMartConfiguration) {
 
     @Path("/token")
     @GET
-    fun token(@QueryParam("code") code: String, @QueryParam("state") state: String): TokenResponse {
+    fun token(@QueryParam("code") code: String, @QueryParam("state") state: String): LoginResponse {
         println("$code >> $state")
         Preconditions.checkArgument(state in knownStates, "Unknown state, request was tampered with")
         knownStates.remove(state)
@@ -52,6 +55,14 @@ class CharacterResource(val configuration: AirMartConfiguration) {
                 .response()
         println(response)
         val tokenResponse = jacksonObjectMapper().readValue<TokenResponse>(String(response.data))
-        return tokenResponse
+
+        val (_, characterResponse, _) = "https://login.eveonline.com/oauth/verify"
+                .httpGet()
+                .header(Pair("Authorization", "Bearer ${tokenResponse.access_token}"))
+                .response()
+
+        val parsedResponse = jacksonObjectMapper().readValue<CharacterResponse>(String(characterResponse.data))
+        val loginResponse = LoginResponse(parsedResponse.CharacterName, tokenResponse.access_token)
+        return loginResponse
     }
 }
