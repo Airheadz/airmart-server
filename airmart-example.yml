@@ -1,10 +1,10 @@
-discordWebhookUrl: "foo"
-discordUserAgent: "DiscordBot (Test, 0.0.1)"
+discordWebhookUrl: DISCORD_WEBHOOK_URL
+discordUserAgent: DISCORD_USER_AGENT
 
-fittingsBasePath: "path/to/fittings"
+fittingsBasePath: FITTINGS_BASE_PATH
 
 sso:
-  clientId: foo
-  clientSecret: bar
-  callback: server
-  scopes: publicData
+  clientId: CLIENT_ID
+  clientSecret: CLIENT_SECRET
+  callback: CALLBACK
+  scopes: SCOPES
